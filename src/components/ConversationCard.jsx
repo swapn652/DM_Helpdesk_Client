@@ -37,6 +37,8 @@ export const ConversationCard = ({ senderName, unreadMessageCount, conversationI
                     }
                 }
 
+                console.log("lastmsgtime: ", lastMessageTime);
+
                 if (lastMessageTime) {
                     const diffInMillis = Date.now() - new Date(lastMessageTime).getTime();
                     if (diffInMillis > 24 * 60 * 60 * 1000) {
