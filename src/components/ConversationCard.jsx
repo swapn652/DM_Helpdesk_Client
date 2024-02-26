@@ -29,9 +29,9 @@ export const ConversationCard = ({ senderName, unreadMessageCount, conversationI
 
                 // Find the time of the last message from someone other than myName
                 let lastMessageTime = null;
-                for (let i = messages.length - 1; i >= 0; i--) {
+                for (let i = 0; i < message.length; i++) {
                     const message = messages[i];
-                    if (message.from.name !== myName) {
+                    if (message.from !== myName) {
                         lastMessageTime = message.created_time;
                         break;
                     }
