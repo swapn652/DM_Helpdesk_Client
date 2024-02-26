@@ -65,7 +65,7 @@ export const CustomerDetails = ({ senderMap, currConversationId, accessToken }) 
                                         Email
                                     </Typography>
                                     <Typography className="flex-shrink">
-                                        swapnilpant0652@gmail.com
+                                        {`${senderName.split(" ")[0].toLowerCase()}${senderName.split(" ")[1].toLowerCase()}@gmail.com`}
                                     </Typography>
                                 </Box>
                                 <Box className="flex flex-row mt-2 justify-between">
