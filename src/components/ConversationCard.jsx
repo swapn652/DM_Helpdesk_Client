@@ -6,56 +6,10 @@ import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export const ConversationCard = ({ senderName, unreadMessageCount, conversationId, accessToken, setCurrConversationId, currConversationId, messagesIdMap, myName }) => {
+export const ConversationCard = ({ senderName, unreadMessageCount, conversationId, accessToken, setCurrConversationId, showCard }) => {
     const [lastMessage, setLastMessage] = useState("");
     const [lastMessageTime, setLastMessageTime] = useState("");
     const [clicked, setClicked] = useState(false);
-    const [showCard, setShowCard] = useState(true);
-
-    useEffect(() => {
-        const fetchLastMessage = async () => {
-            try {
-                const msgArray = messagesIdMap[currConversationId];
-                const requests = msgArray.map(id =>
-                    axios.get(`https://graph.facebook.com/v19.0/${id}?fields=message,created_time,from`, {
-                        params: {
-                            access_token: accessToken
-                        }
-                    })
-                );
-
-                const responses = await Promise.all(requests);
-                const messages = responses.map(response => response.data);
-
-                // Find the time of the last message from someone other than myName
-                let lastMessageTime = null;
-                for (let i = 0; i < message.length; i++) {
-                    const message = messages[i];
-                    if (message.from !== myName) {
-                        lastMessageTime = message.created_time;
-                        break;
-                    }
-                }
-
-                console.log("lastmsgtime: ", lastMessageTime);
-
-                if (lastMessageTime) {
-                    const diffInMillis = Date.now() - new Date(lastMessageTime).getTime();
-                    if (diffInMillis > 24 * 60 * 60 * 1000) {
-                        setShowCard(false);
-                    }
-                }
-
-            } catch (error) {
-                console.error('Error fetching last message:', error);
-            }
-        };
-
-        if (currConversationId) {
-            fetchLastMessage();
-        }
-    }, [currConversationId, accessToken, messagesIdMap, myName]);
-
 
     function getTimeAgo(latestMessageTime) {
         const messageDate = new Date(latestMessageTime);
@@ -120,7 +74,7 @@ export const ConversationCard = ({ senderName, unreadMessageCount, conversationI
 
     return (
         <>
-        {showCard === true && (
+        {showCard === true ? (
             <Card sx={{ minHeight: 100, minWidth: "100%", boxShadow: "none", backgroundColor: clicked ? "#edf2f7" : "inherit", cursor: "pointer" }} className="border-[1px] border-gray-400" onClick={handleClick}>
                 <CardContent className="flex flex-col relative">
                     <Box className="flex flex-row">
@@ -146,6 +100,10 @@ export const ConversationCard = ({ senderName, unreadMessageCount, conversationI
                     </Typography>
                 </CardContent>
             </Card>
+        ) : (
+            <div className='flex items-center justify-center mt-10'>
+                <h1 className='text-2xl font-bold'>No Conversation Found</h1>
+            </div>
         )}
         </>
     )
